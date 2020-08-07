@@ -9,14 +9,20 @@ const client = new Twitter({
 
 let params = { screen_name: 'elonmusk' };
 
-
+const getLastData = () => {
+    client.get('statuses/user_timeline', params, (err, tweets, res) => {
+        if (!err, res.statusCode === 200) {
+            return tweets[0];
+        }
+    })
+}
 
 const getTweetContent = () => {
-    client.get('statuses/user_timeline', params, function(err, tweets, res) {
+    client.get('statuses/user_timeline', params, (err, tweets, res) => {
         if (!err) {
             return tweets[0].text;
         }
     });
 }
 
-getTweetContent();
+getLastData();
