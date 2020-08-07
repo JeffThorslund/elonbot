@@ -8,8 +8,15 @@ const client = new Twitter({
 });
 
 let params = { screen_name: 'elonmusk' };
-client.get('statuses/user_timeline', params, function(err, tweets, res) {
-    if (!err) {
-        console.log(tweets);
-    }
-});
+
+
+
+const getTweetContent = () => {
+    client.get('statuses/user_timeline', params, function(err, tweets, res) {
+        if (!err) {
+            return tweets[0].text;
+        }
+    });
+}
+
+getTweetContent();
