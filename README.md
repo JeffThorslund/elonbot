@@ -13,8 +13,8 @@ If you have git installed:
 $ git clone https://github.com/rohitjethoe/elonbot.git
 ```
 
-### :white_check_mark: Todo
-- Creating telegram bot of the app
+<!-- ### :white_check_mark: Todo
+- Creating telegram bot of the app -->
 
 ### :copyright: License
 [MIT License](http://opensource.org/licenses/MIT)
