@@ -22,9 +22,41 @@ bot.onText(/\/start/, (msg) => {
 });
 
 bot.onText(/\/last/, (msg) => {
-    client.get('statuses/user_timeline', params, async (err, tweets, res) => {
-        if (!err) {
-            console.log(tweets[0].text);
+    client.get('statuses/user_timeline', params, (err, tweets, res) => {
+        if (!err && res.statusCode === 200) {
+            let tweet = tweets[0].text;
+            let created_at = tweets[0].created_at
+
+            let date = new Date(created_at);
+            let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let fullDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getUTCHours()}:${date.getUTCMinutes()} UTC`;
+            
+            let message = `${tweet}\n\n${fullDate} 🔗`;
+            bot.sendMessage(msg.chat.id, message);
         }
     })
 });
+
+bot.onText(/\/monitor/, (msg) => {
+    bot.sendMessage(msg.chat.id, "ELONBOT is running...");
+    setInterval(() => {
+        client.get('statuses/user_timeline', params, (err, tweets, res) => {
+            if (!err & res.statusCode === 200) {
+                let tweet = tweets[0].text;
+                let created_at = tweets[0].created_at;
+
+                let date = new Date(created_at);
+                let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                let fullDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getUTCHours()}:${date.getUTCMinutes()} UTC`;
+
+                console.log((new Date().getTime() - date.getTime()) / 1000);
+
+                if (((new Date().getTime() - date.getTime()) / 1000) < 270) {
+                    let message = `${tweet}\n\n${fullDate} 🔗`;
+
+                    bot.sendMessage(msg.chat.id, message);
+                }
+            }
+        })
+    }, 120000);
+})
