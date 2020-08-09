@@ -1,4 +1,7 @@
 const Twitter = require('twitter');
+const Telegram = require('node-telegram-bot-api');
+
+const token = "1220029618:AAFYsxIiaO7NICO5UQBDA13RpDiIxmFOhlE";
 
 const client = new Twitter({
     consumer_key: '5T9edPuRipPgC7psKt8CCafv8',
@@ -9,21 +12,19 @@ const client = new Twitter({
 
 let params = { screen_name: 'elonmusk' };
 
-const App = {
-    getTweetContent: () => {
-        client.get('statuses/user_timeline', params, (err, tweets, res) => {
-            if (!err) {
-                return tweets[0].text;
-            }
-        });
-    },
-    getLastData: () => {
-        client.get('statuses/user_timeline', params, (err, tweets, res) => {
-            if (!err, res.statusCode === 200) {
-                return tweets[0];
-            }
-        })
-    }
-}
+let bot = new Telegram(token, {
+    polling: true
+});
 
-module.exports = App;
+bot.onText(/\/start/, (msg) => {
+    const message = "🚀 ELONBOT\n\nI can help you monitoring Elon's twitter and rapidly notify you.\n\n/monitor - run the bot\n/last - get last tweet\n\nDeveleoped with ❤️ by https://rohit.nl/";
+    bot.sendMessage(msg.chat.id, message);
+});
+
+bot.onText(/\/last/, (msg) => {
+    client.get('statuses/user_timeline', params, async (err, tweets, res) => {
+        if (!err) {
+            console.log(tweets[0].text);
+        }
+    })
+});
