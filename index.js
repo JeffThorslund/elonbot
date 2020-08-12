@@ -51,12 +51,16 @@ bot.onText(/\/monitor/, (msg) => {
 
                 console.log((new Date().getTime() - date.getTime()) / 1000);
 
-                if (((new Date().getTime() - date.getTime()) / 1000) < 270) {
+                if (((new Date().getTime() - date.getTime()) / 1000) < 60) {
                     let message = `${tweet}\n\n${fullDate} 🔗`;
 
                     bot.sendMessage(msg.chat.id, message);
                 }
             }
         })
-    }, 120000);
+    }, 30000);
+});
+
+bot.onText(/\/help/, (msg) => {
+    bot.sendMessage(msg.chat.id, '💻 Command List:\n\n/monitor - run the elon bot\n/last - get elon\'s last tweet.\n\nHave fun!\n\nDeveleoped with ❤️ by https://rohit.nl/')
 })
