@@ -34,4 +34,32 @@ router.get('/elonmusk', (req, res) => {
     }) 
 })
 
+router.get('/elonmusk/:index', (req, res) => {
+    client.get('statuses/user_timeline', params, (err, tweets, result) => {
+        if (!err && result.statusCode === 200) {
+            if (req.params.index < 20) {
+                let data = [];
+
+                for (let i = 0; i < req.params.index; i++) {
+                    let text = tweets[i].text;
+                    let date = tweets[i].created_at;
+                    let url = tweets[i].entities.urls[0];
+
+                    const tweet = {
+                        text,
+                        date,
+                        url
+                    };
+
+                    data.push(tweet);
+                }
+                
+                res.send(data);
+            } else {
+                res.send({ error: `Please enter a number below 20...`})
+            }
+        }
+    }) 
+})
+
 module.exports = router;
