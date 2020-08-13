@@ -37,7 +37,7 @@ router.get('/elonmusk', (req, res) => {
 router.get('/elonmusk/:index', (req, res) => {
     client.get('statuses/user_timeline', params, (err, tweets, result) => {
         if (!err && result.statusCode === 200) {
-            if (req.params.index < 20) {
+            if (req.params.index <= 20) {
                 let data = [];
 
                 for (let i = 0; i < req.params.index; i++) {
