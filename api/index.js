@@ -15,7 +15,21 @@ const router = express.Router();
 router.get('/elonmusk', (req, res) => {
     client.get('statuses/user_timeline', params, (err, tweets, result) => {
         if (!err && result.statusCode === 200) {
-            res.send(tweets);
+            let data = [];
+            for (let i = 0; i < 5; i++) {
+                let text = tweets[i].text;
+                let date = tweets[i].created_at;
+                let url = tweets[i].entities.urls[0];
+
+                const tweet = {
+                    text,
+                    date,
+                    url
+                };
+
+                data.push(tweet);
+            }
+            res.send(data);
         }
     }) 
 })
