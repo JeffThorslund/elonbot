@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
     res.send({ status: 'Server is running...' });
 });
 
-app.use('/api', require('./api/index'));
+app.use('/api/v1', require('./api/index'));
 
 const PORT = process.env.PORT || 5000;
 
