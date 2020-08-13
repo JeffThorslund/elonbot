@@ -12,6 +12,8 @@ app.use('/', (req, res) => {
     res.send({ status: 'Server is running...' });
 });
 
+app.use('/api', require('./api/index'));
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => { console.log(`Server is running on http://localhost:${PORT}`)});
