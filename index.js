@@ -1,5 +1,20 @@
+const express = require('express');
+const cors = require('cors');
 const Twitter = require('twitter');
 const Telegram = require('node-telegram-bot-api');
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+app.use('/', (req, res) => {
+    res.send({ status: 'Server is running...' });
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => { console.log(`Server is running on http://localhost:${PORT}`)});
 
 const token = "1220029618:AAFYsxIiaO7NICO5UQBDA13RpDiIxmFOhlE";
 
@@ -38,7 +53,7 @@ bot.onText(/\/last/, (msg) => {
 });
 
 bot.onText(/\/monitor/, (msg) => {
-    bot.sendMessage(msg.chat.id, "ELONBOT is running...");
+    bot.sendMessage(msg.chat.id, "ELONBOT is running { @elonmusk }...");
     setInterval(() => {
         client.get('statuses/user_timeline', params, (err, tweets, res) => {
             if (!err & res.statusCode === 200) {
@@ -68,7 +83,7 @@ bot.onText(/\/help/, (msg) => {
 bot.onText(/\/tesla/, (msg) => {
     params = { screen_name: 'tesla' }
     client.get('statuses/user_timeline', params, (err, tweets, res) => {
-        if (!err, res.statusCode === 200) {
+        if (!err && res.statusCode === 200) {
             let tweet = tweets[0].text;
             let created_at = tweets[0].created_at;
 
@@ -80,4 +95,29 @@ bot.onText(/\/tesla/, (msg) => {
             bot.sendMessage(msg.chat.id, message);
         }
     })
+})
+
+bot.onText(/\/teslamonitor/, (msg) => {
+    params = { screen_name: 'tesla' }
+    bot.sendMessage(msg.chat.id, "ELONBOT is running { https://twitter.com/tesla }...")
+    setInterval(() => {
+        client.get('statuses/user-timeline', params, (err, tweets, res) => {
+            if (!err && res.statusCode === 200) {
+                let tweet = tweets[0].text;
+                let created_at = tweets[0].created_at;
+
+                let date = new Date(created_at);
+                let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                let fullDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getUTCHours()}:${date.getUTCMinutes()} UTC`;
+    
+                console.log((new Date().getTime() - date.getTime()) / 1000);
+
+                if (((new Date().getTime() - date.getTime()) / 1000) < 60) {
+                    let message = `${tweet}\n\n${fullDate} 🔗`;
+
+                    bot.sendMessage(msg.chat.id, message);
+                }
+            }
+        })
+    }, 30000)
 })
