@@ -12,7 +12,7 @@ let params = { screen_name: 'elonmusk' };
 
 const router = express.Router();
 
-router.use('/elonmusk', (req, res) => {
+router.get('/elonmusk', (req, res) => {
     client.get('statuses/user_timeline', params, (err, tweets, result) => {
         if (!err && result.statusCode === 200) {
             res.send(tweets);
