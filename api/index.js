@@ -62,4 +62,27 @@ router.get('/elonmusk/:index', (req, res) => {
     }) 
 })
 
+router.get('/tesla', (req, res) => {
+    params = { screen_name: 'tesla' };
+    client.get('statuses/user_timeline', params, (err, tweets, result) => {
+        if (!err && result.statusCode === 200) {
+            let data = [];
+            for (let i = 0; i < 5; i++) {
+                let text = tweets[i].text;
+                let date = tweets[i].created_at;
+                let url = tweets[i].entities.urls[0];
+
+                const tweet = {
+                    text,
+                    date,
+                    url
+                };
+
+                data.push(tweet);
+            }
+            res.send(data);
+        }
+    }) 
+})
+
 module.exports = router;
